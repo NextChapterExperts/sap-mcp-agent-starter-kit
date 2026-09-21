@@ -1,0 +1,5 @@
+# Cursor IDE Rules for SAP Enterprise Architecture
+
+- Verify all APIM XML policies against the local MCP server before generating code.
+- Always include an executive statement, a Mermaid diagram, and 3-perspective guidance (Developer, Architect, Management).
+- Strictly adhere to SAP Clean Core guidelines.

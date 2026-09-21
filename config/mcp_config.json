@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "mcpServers": {
+    "sap-docs-community": {
+      "serverUrl": "https://mcp-sap-docs.marianzeis.de/mcp",
+      "description": "Remote HTTP/SSE: Semantic vector and full-text search across SAP Community blogs, official documentation, ABAP keyword reference, UI5, and DSAG guidelines (Remote URL, no local process required)."
+    },
+    "sap-developers-search": {
+      "serverUrl": "https://developers.sap.com/mcp/search",
+      "description": "Remote HTTP/SSE: Official SAP Developer Center MCP service providing step-by-step developer tutorials and learning missions (Remote URL)."
+    },
+    "sap-notes": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "sap-note-search-mcp"
+      ],
+      "description": "Hosted stdio: Search official SAP Support Notes and Knowledge Base Articles (KBAs) on me.sap.com via npx."
+    },
+    "sap-help-portal-local": {
+      "command": "python3",
+      "args": [
+        "scripts/sap_help_mcp_server.py"
+      ],
+      "description": "Local Python implementation: Stdio MCP server for SAP Help Portal search and APIM policies (SpikeArrest, Quota, VerifyAPIKey, RaiseFault)."
+    },
+    "sap-api-hub-local": {
+      "command": "python3",
+      "args": [
+        "scripts/sap_api_hub_mcp_server.py"
+      ],
+      "description": "Local Python implementation: Stdio MCP server for SAP Business Accelerator Hub (OData v2/v4, REST, and CloudEvents)."
+    }
+  }
+}

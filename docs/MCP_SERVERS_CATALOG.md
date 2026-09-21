@@ -73,23 +73,23 @@ flowchart TD
    - **Parameters:** None.
 
 #### Sample Invocation & Response
+
+**Tool Request (`tools/call`):**
 ```json
-// tools/call -> sap_help_get_policy
 {
-  "policy_name": "SpikeArrest"
+  "name": "sap_help_get_policy",
+  "arguments": {
+    "policy_name": "SpikeArrest"
+  }
 }
+```
 
-// Result
-## SAP APIM Policy: SpikeArrest
-**Category:** Traffic Management
-**Purpose:** Smooth traffic spikes by limiting requests per minute or second.
-
+**Tool Response (`content[0].text`):**
 ```xml
 <SpikeArrest async="false" continueOnError="false" enabled="true" xmlns="http://www.sap.com/apimgmt">
     <Rate>100pm</Rate>
     <UseEffectiveParam>true</UseEffectiveParam>
 </SpikeArrest>
-```
 ```
 
 ---

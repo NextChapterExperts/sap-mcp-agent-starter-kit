@@ -30,24 +30,24 @@ The **Model Context Protocol (MCP)**, open-sourced by Anthropic and adopted acro
 
 ```mermaid
 flowchart LR
-    subgraph Host ["AI Host / IDE (Gemini, Antigravity, Claude, Cursor)"]
+    subgraph Host ["AI Host / IDE"]
         LLM["Large Language Model"]
         Client["MCP Client Engine"]
     end
 
     subgraph RemoteServer ["Remote MCP Servers (Cloud)"]
-        Docs["SAP Docs Community<br><i>(https://.../mcp)</i>"]
-        DevSearch["SAP Developer Search<br><i>(https://.../search)</i>"]
+        Docs["SAP Docs Community<br><i>https://.../mcp</i>"]
+        DevSearch["SAP Developer Search<br><i>https://.../search</i>"]
     end
 
     subgraph LocalServer ["Local stdio MCP Servers (Python)"]
-        Help["sap_help_mcp_server.py<br><i>(Help Portal & APIM Policies)</i>"]
-        ApiHub["sap_api_hub_mcp_server.py<br><i>(OData APIs & CloudEvents)</i>"]
+        Help["sap_help_mcp_server.py<br><i>Help Portal & APIM Policies</i>"]
+        ApiHub["sap_api_hub_mcp_server.py<br><i>OData APIs & CloudEvents</i>"]
     end
 
     LLM <--> Client
-    Client <-- HTTP / SSE Stream --> RemoteServer
-    Client <-- JSON-RPC 2.0 (stdin / stdout) --> LocalServer
+    Client <-->|"HTTP / SSE Stream"| RemoteServer
+    Client <-->|"JSON-RPC 2.0 stdio"| LocalServer
 ```
 
 ---

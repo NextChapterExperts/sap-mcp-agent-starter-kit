@@ -14,21 +14,21 @@ In enterprise and mission-critical environments (such as energy utilities, KRITI
 
 ```mermaid
 flowchart TD
-    subgraph Scraping ["❌ The Scraping Anti-Pattern"]
+    subgraph Scraping ["The Scraping Anti-Pattern"]
         S1["Python requests.get(url)"] --> S2["WAF / Akamai Bot Manager"]
-        S2 -->|403 Forbidden / CAPTCHA| S3["Hard Failure: Script Crashes"]
-        S1 -.->|Bypassed| S4["Client-Side SPA (SAP UI5 / Angular)"]
-        S4 -->|Empty DOM Skeleton| S3
-        S1 -.->|Headless Browser| S5["500 MB RAM Bloat + 30k Tokens HTML Noise"]
+        S2 -->|"403 Forbidden or CAPTCHA"| S3["Hard Failure: Script Crashes"]
+        S1 -.->|"Bypassed"| S4["Client-Side SPA: SAP UI5 / Angular"]
+        S4 -->|"Empty DOM Skeleton"| S3
+        S1 -.->|"Headless Browser"| S5["500 MB RAM Bloat + 30k Tokens HTML Noise"]
     end
 
-    subgraph MCPServer ["✅ The MCP Server Architectural Pattern"]
-        M1["LLM Reasoning Loop (Tool Call)"] --> M2["MCP Server Dispatcher"]
+    subgraph MCPServer ["The MCP Server Architectural Pattern"]
+        M1["LLM Reasoning Loop"] --> M2["MCP Server Dispatcher"]
         M2 --> M3{"Local SSoT Cache Available?"}
-        M3 -->|Hit: 0ms Latency| M4["Immediate Grounded Response"]
-        M3 -->|Miss| M5["Official Microservice (http.svc/search JSON)"]
-        M5 -->|Network Block / Timeout| M6["Automatic Fallback to Offline SSoT"]
-        M5 -->|Success (200 OK)| M7["Data Pruning: Extract XML/Schema (200 Tokens)"]
+        M3 -->|"Hit: 0ms Latency"| M4["Immediate Grounded Response"]
+        M3 -->|"Miss"| M5["Official Microservice: http.svc/search JSON"]
+        M5 -->|"Network Block or Timeout"| M6["Automatic Fallback to Offline SSoT"]
+        M5 -->|"Success: 200 OK"| M7["Data Pruning: Extract XML and Schema"]
         M6 --> M7
         M7 --> M8["Feeds Clean Markdown to LLM Context Window"]
     end

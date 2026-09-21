@@ -16,20 +16,21 @@ However, MCP represents a fundamental shift in software architecture:
 ```mermaid
 flowchart TD
     subgraph TraditionalAPI ["Traditional API Pattern (REST / gRPC)"]
-        Dev["Software Engineer"] -->|Writes static code| Code["Client Application (e.g. React / Spring)"]
-        Code -->|HTTP GET /api/v1/customers| API["REST API Endpoint"]
-        API -->|Fixed JSON Payload| Code
-        Note1["Deterministic: Code path is hardcoded at compile-time."]
+        Dev["Software Engineer"] -->|"Writes static code"| Code["Client Application"]
+        Code -->|"HTTP GET /api/v1/customers"| API["REST API Endpoint"]
+        API -->|"Fixed JSON Payload"| Code
+        Note1["Deterministic: Code path is hardcoded at compile-time"]
     end
 
     subgraph MCPServerPattern ["Model Context Protocol (MCP) Pattern"]
         User["User Natural Language Prompt"] --> LLM["LLM Reasoning Loop (Agent)"]
-        LLM <-->|1. tools/list (Semantic Tool Discovery)| MCP["MCP Server"]
-        LLM -->|2. Evaluates intent & autonomously chooses tool| LLM
-        LLM -->|3. tools/call {params}| MCP
-        MCP -->|4. Pruned Markdown / Text result| LLM
-        LLM -->|5. Synthesized, verified response| User
-        Note2["Agentic: Tool selection & arguments are decided dynamically."]
+        LLM -->|"1. tools/list discovery"| MCP["MCP Server"]
+        MCP -->|"2. Tool schemas and descriptions"| LLM
+        LLM -->|"3. Evaluates intent and arguments"| LLM
+        LLM -->|"4. tools/call execution"| MCP
+        MCP -->|"5. Pruned Markdown result"| LLM
+        LLM -->|"6. Synthesized verified response"| User
+        Note2["Agentic: Tool selection and arguments are decided dynamically"]
     end
 ```
 

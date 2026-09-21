@@ -217,16 +217,17 @@ description: >-
 
 ---
 
-## 5. Cross-Platform Compatibility Matrix
+## 5. Universal Zero-Config IDE Support
 
-Different developer environments use different conventions, but the underlying concepts and MCP servers are **100% portable**:
+This repository is engineered for **seamless multi-IDE coexistence**. Because different AI environments look for distinct rule filenames, all configurations sit together in the root directory without conflict. **No file copying or setup scripts are required.**
 
-| Component | Google Gemini / Antigravity | Anthropic Claude Code | Cursor IDE | Windsurf (Cascade) |
+| Environment | System Rules File (Auto-Loaded) | Multi-Agent Index | Skill Definition Path | MCP Config Location |
 | :--- | :--- | :--- | :--- | :--- |
-| **System Rules** | `GEMINI.md` | `CLAUDE.md` | `.cursorrules` or `.cursor/rules/*.mdc` | `.windsurfrules` |
-| **Skills & Prompts** | `.agents/skills/*/SKILL.md` | `.claude/commands/` | `.cursor/rules/` | Cascade Workflows |
-| **Agent Index** | `AGENTS.md` | Subagent configs | Rules Index | Memory Index |
-| **MCP Configuration**| `config/mcp_config.json` | `claude mcp add` / `.claude.json` | `~/.cursor/mcp.json` | `mcp_config.json` |
+| **Google Antigravity / Gemini** | `GEMINI.md` (in root) | `AGENTS.md` (in root) | `.agents/skills/*/SKILL.md` | `config/mcp_config.json` |
+| **Anthropic Claude Code** | `CLAUDE.md` (in root) | `AGENTS.md` (in root) | Built-in tool calling | `claude mcp add` / `.claude.json` |
+| **Cursor IDE** | `.cursorrules` (in root) | Context rules | `.cursorrules` rules | `~/.cursor/mcp.json` |
+| **Windsurf (Cascade)** | `.windsurfrules` (in root) | Cascade Memories | Inline workflows | `~/.codeium/windsurf/mcp_config.json` |
+| **xAI Grok / Grok Build** | `GROK.md` (in root) | `AGENTS.md` (in root) | Custom Prompts / System | IDE Settings / API params |
 
 ---
 
@@ -234,7 +235,7 @@ Different developer environments use different conventions, but the underlying c
 
 ### Step 1: Clone the Starter Kit
 ```bash
-git clone https://github.com/<your-account>/sap-mcp-agent-starter-kit.git
+git clone https://github.com/NextChapterExperts/sap-mcp-agent-starter-kit.git
 cd sap-mcp-agent-starter-kit
 ```
 
@@ -243,13 +244,15 @@ Run the built-in automated test suite:
 ```bash
 python3 scripts/test_mcp_servers.py
 ```
-*Expected output: All handshake and tool execution tests pass with zero errors.*
+*Expected output: Protocol handshakes, tool listings, and sample invocations pass with zero errors.*
 
-### Step 3: Register in Your AI IDE
-Copy the configuration from `config/mcp_config.json` into your respective IDE:
-- **Cursor:** Paste into `~/.cursor/mcp.json`
-- **Claude Code:** Run `claude mcp add sap-help python3 $(pwd)/scripts/sap_help_mcp_server.py`
-- **Gemini / Antigravity:** Reference `config/mcp_config.json`
+### Step 3: Open in Your Preferred IDE (Zero Setup)
+Simply open the `sap-mcp-agent-starter-kit` folder in your AI editor of choice:
+- **Google Antigravity / Gemini:** Open the folder. Antigravity immediately detects `GEMINI.md`, `AGENTS.md`, and the `student-copilot` skill in `.agents/skills/`.
+- **Cursor:** Open the folder. Cursor automatically detects `.cursorrules`. Add the servers in `config/mcp_config.json` to your `~/.cursor/mcp.json`.
+- **Claude Code:** Open the folder. Claude automatically reads `CLAUDE.md`.
+- **Windsurf:** Open the folder. Cascade automatically reads `.windsurfrules`.
+- **xAI Grok / Grok Build:** Point Grok Build to `GROK.md` as its root system prompt.
 
 ### Step 4: Challenge the Agent
 Prompt your AI Agent with a real enterprise challenge:

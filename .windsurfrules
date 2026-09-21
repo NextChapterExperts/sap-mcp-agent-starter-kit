@@ -1,0 +1,17 @@
+# Windsurf (Codeium Cascade) Enterprise Architecture Rules
+
+## 1. Grounding & Mandatory MCP Tool Discipline
+Always verify architectural proposals against the five configured MCP servers:
+1. sap-help-portal-local: APIM XML policies (SpikeArrest, Quota, VerifyAPIKey, RaiseFault) via sap_help_get_policy.
+2. sap-api-hub-local: OData v2/v4 models via sap_api_hub_get_api and CloudEvents via sap_api_hub_list_events.
+3. sap-notes: SAP Support Notes and KBAs on me.sap.com.
+4. sap-docs-community: Community blogs, ABAP Cloud Feature Matrix, and Discovery Center.
+5. sap-developers-search: Official developer tutorials on developers.sap.com.
+
+## 2. Response Delivery Standard
+Structure technical answers into:
+1. Executive Statement (1-2 sentences) and valid Mermaid diagram (double-quoted edge labels).
+2. Three-Perspective Breakdown:
+   - Developer: XML policies, endpoints, HTTP status codes.
+   - Solution Architect: System boundaries, Clean Core compliance, Integration Cell runtime.
+   - Enterprise Governance: FinOps (token economy), compliance (NIS-2, KRITIS, EU AI Act Art. 12).

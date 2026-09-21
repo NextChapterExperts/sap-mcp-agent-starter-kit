@@ -85,7 +85,7 @@ sap-mcp-agent-starter-kit/
 ├── config/
 │   └── mcp_config.json        # Community MCP server configuration
 ├── docs/                      # Technical guides & architecture deep dives
-│   ├── MCP_SERVERS_CATALOG.md # Specification of all 11 MCP servers & editions
+│   ├── MCP_SERVERS_CATALOG.md # Detailed specification of Community MCP servers & tools
 │   ├── WHAT_IS_MCP.md         # The MCP protocol, transport, and agent mechanics
 │   ├── WHAT_IS_MCP_VS_API.md  # Detailed comparison: MCP vs. REST / GraphQL / gRPC
 │   └── WHY_MCP_OVER_SCRAPING.md # Why MCP beats web scraping & manual search
@@ -119,8 +119,8 @@ sap-mcp-agent-starter-kit/
 
 Explore the conceptual guides in `docs/`:
 
-* 📚 **[Enterprise MCP Server Catalog & Technical Specification](docs/MCP_SERVERS_CATALOG.md)**  
-  Full technical breakdown of all 11 MCP servers: tools, JSON schemas, parameters, sample payloads, and offline SSoT resilience.
+* 📚 **[Community MCP Server Catalog & Technical Specification](docs/MCP_SERVERS_CATALOG.md)**  
+  Full technical breakdown of the 5 Community MCP servers: tools, JSON schemas, parameters, and sample payloads.
 * 📖 **[What is the Model Context Protocol (MCP)?](docs/WHAT_IS_MCP.md)**  
   Architectural overview, stdio vs. SSE transports, building zero-dependency Python MCP servers, the JSON-RPC 2.0 lifecycle, and the four layers of autonomous agents.
 * 🔌 **[What is an MCP Server vs. a Traditional API?](docs/WHAT_IS_MCP_VS_API.md)**  

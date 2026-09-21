@@ -1,18 +1,20 @@
-# 🧭 Multi-Agent Directory & Quick-Reference Matrix
+# Multi-Agent Directory and Quick-Reference Matrix
 
-This document provides a single source of truth for all autonomous agents, personas, and trigger prefixes active in this project.
+This document defines the autonomous agents, personas, and trigger interfaces active in this project.
 
 ---
 
-## 🤖 Agent Matrix
+## Agent Roster and MCP Assignment
 
-| Agent / Persona | Trigger / Mode | Core Mission | Essential Tools & MCPs |
+| Agent Identifier | Chat Trigger / Mode | Core Domain | Required MCP Server Toolsets |
 | :--- | :--- | :--- | :--- |
-| **Solution Architecture Co-Pilot** | Free text / Questions | Architectural sparring on BTP Integration Suite, APIM, Clean Core | `sap_help_get_policy`<br>`sap_api_hub_get_api`<br>`sap_docs_community` |
-| **Content & Fact-Check Critic** | `#review-arch`<br>`#fact-check` | Rigorous verification of architectural blueprints against SAP standards | `sap_help_search`<br>`sap-developers-search` |
+| **Solution Architecture Co-Pilot** | Free text / Inquiries | Technical architecture, APIM traffic control, Clean Core decoupling, and CloudEvents integration. | 1. `sap-help-portal-local`<br>2. `sap-api-hub-local`<br>3. `sap-notes`<br>4. `sap-docs-community`<br>5. `sap-developers-search` |
+| **Enterprise Verification Critic** | `#review-arch`<br>`#fact-check` | Uncompromising verification of blueprints and interface designs against official SAP standards and Clean Core rules. | 1. `sap-help-portal-local`<br>2. `sap-notes`<br>3. `sap-api-hub-local`<br>4. `sap-docs-community` |
 
 ---
 
-## 🎯 Architectural Guardrails for Agents
-1. **Zero Hallucinations:** Never guess XML policy syntax or HTTP error codes. Use MCP tools to verify official parameters.
-2. **Layered Explanation:** Always provide Developer, Architect, and Management insights for enterprise decisions.
+## Architectural Guardrails
+
+1. **Mandatory MCP Querying:** Agents must not hypothesize XML policies or OData schemas. If a detail is missing, invoke the respective MCP server.
+2. **Deterministic Output Standard:** Maintain the two-stage structure (Executive Summary + Mermaid diagram, followed by Developer, Architect, and Governance perspectives).
+3. **No Decorative Clutter:** Avoid emojis and colloquial fluff. Focus on clear, verifiable enterprise architecture.

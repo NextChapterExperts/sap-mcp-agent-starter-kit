@@ -1,20 +1,18 @@
-# Multi-Agent Directory and Quick-Reference Matrix
+# Agent Specifications (Community Edition)
 
-This document defines the autonomous agents, personas, and trigger interfaces active in this project.
+License: PolyForm Noncommercial License 1.0.0 (Academic & Student Use Only)
+Commercial / Enterprise Consulting Edition: Contact Next Chapter Experts
 
----
+## Active Agent Skill: Student Co-Pilot
+* Location: `.agents/skills/student-copilot/SKILL.md`
+* Focus: SAP BTP Integration Suite, APIM XML policies, OData v2/v4 APIs, Clean Core evaluation.
+* Data Sources:
+  * `sap-help-portal-local`: Authoritative APIM XML policy templates.
+  * `sap-api-hub-local`: Business Accelerator Hub OData specs and CloudEvents.
+  * `sap-developers-search`: Official developer missions and tutorials.
+  * `sap-docs-community`: Community blogs and ABAP Cloud matrices.
+  * `sap-notes`: Support notes and release restrictions.
 
-## Agent Roster and MCP Assignment
-
-| Agent Identifier | Chat Trigger / Mode | Core Domain | Required MCP Server Toolsets |
-| :--- | :--- | :--- | :--- |
-| **Solution Architecture Co-Pilot** | Free text / Inquiries | Technical architecture, APIM traffic control, Clean Core decoupling, and CloudEvents integration. | 1. `sap-help-portal-local`<br>2. `sap-api-hub-local`<br>3. `sap-notes`<br>4. `sap-docs-community`<br>5. `sap-developers-search` |
-| **Enterprise Verification Critic** | `#review-arch`<br>`#fact-check` | Uncompromising verification of blueprints and interface designs against official SAP standards and Clean Core rules. | 1. `sap-help-portal-local`<br>2. `sap-notes`<br>3. `sap-api-hub-local`<br>4. `sap-docs-community` |
-
----
-
-## Architectural Guardrails
-
-1. **Mandatory MCP Querying:** Agents must not hypothesize XML policies or OData schemas. If a detail is missing, invoke the respective MCP server.
-2. **Deterministic Output Standard:** Maintain the two-stage structure (Executive Summary + Mermaid diagram, followed by Developer, Architect, and Governance perspectives).
-3. **No Decorative Clutter:** Avoid emojis and colloquial fluff. Focus on clear, verifiable enterprise architecture.
+## Two-Stage Didactic Pattern
+1. Executive Statement & Mermaid Diagram (`flowchart TD`).
+2. Three-Perspective Technical Breakdown (Developer, Architect, Governance).

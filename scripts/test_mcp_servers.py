@@ -68,7 +68,7 @@ def main():
     try:
         test_server("sap_help_mcp_server.py", "sap_help_get_policy", {"policy_name": "SpikeArrest"})
         test_server("sap_api_hub_mcp_server.py", "sap_api_hub_get_api", {"api_name": "API_BUSINESS_PARTNER"})
-        print("\nALL TESTS PASSED: Your MCP servers are ready for AI Agents.")
+        print("\nALL COMMUNITY MCP SERVERS PASSED: Environment ready for AI Agents.")
         print("=" * 70)
     except Exception as exc:
         print(f"\n[FAIL] Test failed: {exc}", file=sys.stderr)

@@ -4,270 +4,130 @@
 [![Python: 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
 [![Protocol: MCP](https://img.shields.io/badge/MCP-2024--11--05-brightgreen.svg)](https://modelcontextprotocol.io/)
 
-> **A comprehensive, hands-on starter kit for students, educators, and software engineers to learn how to build Model Context Protocol (MCP) servers from scratch in Python and define grounded AI Agents with specialized Skills.**
+> **A production-ready, zero-config starter kit for students and engineers to run Model Context Protocol (MCP) servers locally and deploy grounded AI Enterprise Architecture Agents across Google Antigravity, Cursor, Claude Code, Windsurf, and xAI Grok Build.**
 
 ---
 
 ## 🧭 Table of Contents
 
-1. [Architectural Overview: What is MCP?](#1-architectural-overview-what-is-mcp)
-   - 📖 **Deep Dive:** [What is an MCP Server vs. a Traditional API?](docs/WHAT_IS_MCP_VS_API.md)
-   - 🛡️ **Architecture & Legal:** [Why Use MCP Over Web Scraping & Manual Search?](docs/WHY_MCP_OVER_SCRAPING.md)
-2. [The Two Flavors of MCP: Remote URL vs. Local stdio](#2-the-two-flavors-of-mcp-remote-url-vs-local-stdio)
-3. [Deep Dive: Building Zero-Dependency Python MCP Servers](#3-deep-dive-building-zero-dependency-python-mcp-servers)
-4. [Defining Autonomous Agents & Skills](#4-defining-autonomous-agents--skills)
-5. [Cross-Platform Compatibility Matrix](#5-cross-platform-compatibility-matrix)
-6. [Hands-On Student Tutorial (Step-by-Step)](#6-hands-on-student-tutorial-step-by-step)
-7. [Automated Testing & Verification](#7-automated-testing--verification)
+1. [Universal Zero-Config IDE Support](#1-universal-zero-config-ide-support)
+2. [Quickstart: 4-Step Hands-On Student Lab](#2-quickstart-4-step-hands-on-student-lab)
+3. [Repository Layout](#3-repository-layout)
+4. [The 5 Pre-Configured MCP Data Sources](#4-the-5-pre-configured-mcp-data-sources)
+5. [Architectural Deep Dives (Documentation)](#5-architectural-deep-dives-documentation)
+6. [Automated Verification](#6-automated-verification)
+7. [License](#7-license)
 
 ---
 
-## 1. Architectural Overview: What is MCP?
+## 1. Universal Zero-Config IDE Support
 
-Large Language Models (LLMs) traditionally operate as isolated reasoning engines: they possess vast general knowledge but cannot directly inspect enterprise APIs, query databases, or execute secure local scripts.
-
-The **Model Context Protocol (MCP)**, open-sourced by Anthropic and adopted across the AI industry (Google Antigravity, Claude Code, Cursor, Windsurf), acts as an open, vendor-neutral standard—the "USB-C standard for AI":
-
-```mermaid
-flowchart LR
-    subgraph Host ["AI Host / IDE"]
-        LLM["Large Language Model"]
-        Client["MCP Client Engine"]
-    end
-
-    subgraph RemoteServer ["Remote MCP Servers (Cloud)"]
-        Docs["SAP Docs Community<br><i>https://.../mcp</i>"]
-        DevSearch["SAP Developer Search<br><i>https://.../search</i>"]
-    end
-
-    subgraph LocalServer ["Local stdio MCP Servers (Python)"]
-        Help["sap_help_mcp_server.py<br><i>Help Portal & APIM Policies</i>"]
-        ApiHub["sap_api_hub_mcp_server.py<br><i>OData APIs & CloudEvents</i>"]
-    end
-
-    LLM <--> Client
-    Client <-->|"HTTP / SSE Stream"| RemoteServer
-    Client <-->|"JSON-RPC 2.0 stdio"| LocalServer
-```
-
----
-
-## 2. The Two Flavors of MCP: Remote URL vs. Local stdio
-
-When configuring AI clients, you will encounter two primary delivery models:
-
-### Type A: Remote-Hosted MCP Servers (Pure URLs)
-* **Examples:**
-  * `sap-docs-community`: `https://mcp-sap-docs.marianzeis.de/mcp`
-  * `sap-developers-search`: `https://developers.sap.com/mcp/search`
-* **How it works:**
-  The server runs remotely in the cloud. The AI client connects via **Server-Sent Events (SSE)** or HTTP streaming.
-* **Benefits:** Zero installation, no local dependencies, always up-to-date.
-* **Configuration:**
-  ```json
-  "sap-docs-community": {
-    "serverUrl": "https://mcp-sap-docs.marianzeis.de/mcp",
-    "description": "Semantic search across SAP community and official documentation."
-  }
-  ```
-
-### Type B: Local Executable Servers (stdio Subprocesses)
-* **Examples:**
-  * `sap-help-portal-local`: `scripts/sap_help_mcp_server.py`
-  * `sap-api-hub-local`: `scripts/sap_api_hub_mcp_server.py`
-* **How it works:**
-  The AI IDE spawns your script as a local child process. The IDE communicates with your script via standard streams: sending requests over **Standard Input (`stdin`)** and receiving responses over **Standard Output (`stdout`)**.
-* **Benefits:** 100% offline capable (flight mode), zero latency, access to local files and corporate firewalls.
-* **Configuration:**
-  ```json
-  "sap-help-portal-local": {
-    "command": "python3",
-    "args": ["scripts/sap_help_mcp_server.py"],
-    "description": "Local APIM XML policy and Help Portal catalog."
-  }
-  ```
-
----
-
-## 3. Deep Dive: Building Zero-Dependency Python MCP Servers
-
-While frameworks like `FastMCP` exist, building an MCP server using **pure Python standard library** (`json`, `sys`, `urllib`) provides fundamental insights into how AI protocols actually operate.
-
-### The JSON-RPC 2.0 Protocol Lifecycle
-
-Every stdio MCP server processes JSON-RPC messages arriving line-by-line via `stdin`:
-
-#### 1. Handshake (`initialize`)
-The client negotiates protocol versions and capabilities:
-```json
-// Client -> Server
-{"jsonrpc": "2.0", "id": 1, "method": "initialize"}
-
-// Server -> Client
-{
-  "jsonrpc": "2.0",
-  "id": 1,
-  "result": {
-    "protocolVersion": "2024-11-05",
-    "capabilities": {"tools": {}},
-    "serverInfo": {"name": "student-sap-help-portal", "version": "1.0.0"}
-  }
-}
-```
-
-#### 2. Exposing Capabilities (`tools/list`)
-The client retrieves the registered tools and their JSON schemas:
-```json
-// Client -> Server
-{"jsonrpc": "2.0", "id": 2, "method": "tools/list"}
-
-// Server -> Client
-{
-  "jsonrpc": "2.0",
-  "id": 2,
-  "result": {
-    "tools": [
-      {
-        "name": "sap_help_get_policy",
-        "description": "Returns official XML configuration template for an APIM policy.",
-        "inputSchema": {
-          "type": "object",
-          "properties": {
-            "policy_name": {"type": "string", "description": "e.g. SpikeArrest, Quota, RaiseFault"}
-          },
-          "required": ["policy_name"]
-        }
-      }
-    ]
-  }
-}
-```
-
-#### 3. Tool Execution (`tools/call`)
-The LLM decides autonomously when and how to invoke the tool:
-```json
-// Client -> Server
-{
-  "jsonrpc": "2.0",
-  "id": 3,
-  "method": "tools/call",
-  "params": {
-    "name": "sap_help_get_policy",
-    "arguments": {"policy_name": "SpikeArrest"}
-  }
-}
-
-// Server -> Client
-{
-  "jsonrpc": "2.0",
-  "id": 3,
-  "result": {
-    "content": [
-      {
-        "type": "text",
-        "text": "## 🛡️ SAP APIM Policy: SpikeArrest\n<SpikeArrest>...Rate: 30ps...</SpikeArrest>"
-      }
-    ]
-  }
-}
-```
-
-> [!CAUTION]
-> **The Cardinal Rule of stdio MCP Servers:**  
-> Standard Output (`stdout`) is reserved strictly for valid JSON-RPC responses. Any logging, debugging, or `print()` calls must be redirected to **Standard Error (`stderr`)** via `sys.stderr.write(...)`. Emitting unformatted text to `stdout` breaks the client JSON parser.
-
----
-
-## 4. Defining Autonomous Agents & Skills
-
-A production-ready Enterprise AI Agent consists of four foundational layers:
-
-```mermaid
-flowchart TD
-    Agent["<b>Autonomous AI Agent</b>"]
-    
-    L1["<b>1. Persona & Identity</b><br>Role, tone, domain focus (e.g. Senior Solution Architect)"]
-    L2["<b>2. System Guardrails</b><br>Clean Core adherence, NIS-2 compliance, zero-hallucination rules"]
-    L3["<b>3. Modular Skills (SKILL.md)</b><br>Progressive context injection, 2-stage answer formats"]
-    L4["<b>4. Grounded Tools (MCP)</b><br>Live access to APIs, documentation, and databases"]
-
-    Agent --> L1
-    Agent --> L2
-    Agent --> L3
-    Agent --> L4
-```
-
-### The Skill Specification Pattern (`SKILL.md`)
-Modern AI developer environments load specialized capabilities dynamically via `SKILL.md` files containing YAML frontmatter:
-
-```markdown
----
-name: student-copilot
-description: >-
-  Enterprise Solution Architecture Co-Pilot. Uses MCP tools and provides
-  structured 2-stage answers (Core principle + Mermaid diagram + 3-role projection).
----
-
-# Instructions & Behavior
-1. Check MCP tools before answering technical questions.
-2. Present solutions in a 2-stage format:
-   - Executive statement + Mermaid architecture flow.
-   - 3-Role projection: Developer (XML/HTTP), Architect (Clean Core), C-Level (FinOps).
-```
-
----
-
-## 5. Universal Zero-Config IDE Support
-
-This repository is engineered for **seamless multi-IDE coexistence**. Because different AI environments look for distinct rule filenames, all configurations sit together in the root directory without conflict. **No file copying or setup scripts are required.**
+This repository is engineered for **seamless multi-IDE coexistence**. Because different AI environments look for distinct rule filenames, all configurations sit together in the root directory without conflict. **No file copying, moving, or manual setup scripts are required.**
 
 | Environment | System Rules File (Auto-Loaded) | Multi-Agent Index | Skill Definition Path | MCP Config Location |
 | :--- | :--- | :--- | :--- | :--- |
-| **Google Antigravity / Gemini** | `GEMINI.md` (in root) | `AGENTS.md` (in root) | `.agents/skills/*/SKILL.md` | `config/mcp_config.json` |
-| **Anthropic Claude Code** | `CLAUDE.md` (in root) | `AGENTS.md` (in root) | Built-in tool calling | `claude mcp add` / `.claude.json` |
-| **Cursor IDE** | `.cursorrules` (in root) | Context rules | `.cursorrules` rules | `~/.cursor/mcp.json` |
-| **Windsurf (Cascade)** | `.windsurfrules` (in root) | Cascade Memories | Inline workflows | `~/.codeium/windsurf/mcp_config.json` |
-| **xAI Grok / Grok Build** | `GROK.md` (in root) | `AGENTS.md` (in root) | Custom Prompts / System | IDE Settings / API params |
+| **Google Antigravity / Gemini** | `GEMINI.md` (root) | `AGENTS.md` (root) | `.agents/skills/student-copilot/SKILL.md` | `config/mcp_config.json` |
+| **Anthropic Claude Code** | `CLAUDE.md` (root) | `AGENTS.md` (root) | Built-in tool calling | `claude mcp add` / `.claude.json` |
+| **Cursor IDE** | `.cursorrules` (root) | Context rules | `.cursorrules` rules | `~/.cursor/mcp.json` |
+| **Windsurf (Cascade)** | `.windsurfrules` (root) | Cascade Memories | Inline workflows | `~/.codeium/windsurf/mcp_config.json` |
+| **xAI Grok / Grok Build** | `GROK.md` (root) | `AGENTS.md` (root) | System prompt | IDE Settings / API params |
 
 ---
 
-## 6. Hands-On Student Tutorial (Step-by-Step)
+## 2. Quickstart: 4-Step Hands-On Student Lab
 
-### Step 1: Clone the Starter Kit
+### Step 1: Clone the Repository
 ```bash
 git clone https://github.com/NextChapterExperts/sap-mcp-agent-starter-kit.git
 cd sap-mcp-agent-starter-kit
 ```
 
-### Step 2: Verify Your MCP Servers
-Run the built-in automated test suite:
+### Step 2: Verify Local MCP Servers
+Execute the automated test runner to ensure protocol compliance and runtime readiness:
 ```bash
 python3 scripts/test_mcp_servers.py
 ```
-*Expected output: Protocol handshakes, tool listings, and sample invocations pass with zero errors.*
+*Expected output: Handshakes, tool listings, and sample calls pass with zero errors in under 0.5s.*
 
-### Step 3: Open in Your Preferred IDE (Zero Setup)
-Simply open the `sap-mcp-agent-starter-kit` folder in your AI editor of choice:
-- **Google Antigravity / Gemini:** Open the folder. Antigravity immediately detects `GEMINI.md`, `AGENTS.md`, and the `student-copilot` skill in `.agents/skills/`.
-- **Cursor:** Open the folder. Cursor automatically detects `.cursorrules`. Add the servers in `config/mcp_config.json` to your `~/.cursor/mcp.json`.
-- **Claude Code:** Open the folder. Claude automatically reads `CLAUDE.md`.
-- **Windsurf:** Open the folder. Cascade automatically reads `.windsurfrules`.
-- **xAI Grok / Grok Build:** Point Grok Build to `GROK.md` as its root system prompt.
+### Step 3: Open in Your AI IDE of Choice
+Simply open the cloned folder in your environment:
+- **Google Antigravity / Gemini:** Open folder. Antigravity automatically detects `GEMINI.md`, `AGENTS.md`, and the `student-copilot` skill in `.agents/skills/`.
+- **Cursor:** Open folder. Cursor automatically detects `.cursorrules`. Add servers from `config/mcp_config.json` to your `~/.cursor/mcp.json`.
+- **Claude Code:** Launch `claude` in the folder. Claude automatically reads `CLAUDE.md`.
+- **Windsurf:** Open folder. Cascade automatically reads `.windsurfrules`.
+- **xAI Grok / Grok Build:** Set `GROK.md` as your project system prompt.
 
-### Step 4: Challenge the Agent
-Prompt your AI Agent with a real enterprise challenge:
-> *"We need to protect an SAP S/4HANA OData interface against sudden traffic spikes. What APIM policy should we configure, what does its XML look like, and how does it fit into Clean Core?"*
+### Step 4: Challenge the Architecture Agent
+Ask your AI assistant an enterprise integration question:
+> *"We need to protect an SAP S/4HANA OData interface against sudden traffic spikes. What APIM policy should we configure, what does its XML look like, and how does it align with SAP Clean Core?"*
 
-**Validation Criteria:**
-- Did the agent call `sap_help_get_policy(policy_name="SpikeArrest")`?
-- Did it return a valid Mermaid diagram?
-- Did it break down the answer across Developer, Architect, and C-Level perspectives?
+**Expected Agent Behavior:**
+1. Autonomously calls `sap_help_get_policy(policy_name="SpikeArrest")`.
+2. Autonomously calls `sap_api_hub_get_api` to check Clean Core contract classification.
+3. Delivers a two-stage response: Executive statement with Mermaid diagram, followed by Developer, Architect, and Governance perspectives.
 
 ---
 
-## 7. Automated Testing & Verification
+## 3. Repository Layout
 
-The repository includes a dedicated test harness ([scripts/test_mcp_servers.py](scripts/test_mcp_servers.py)):
+```text
+sap-mcp-agent-starter-kit/
+├── .agents/
+│   └── skills/
+│       └── student-copilot/
+│           └── SKILL.md       # Progressive context skill for Antigravity
+├── .cursorrules               # Auto-loaded rules for Cursor IDE
+├── .windsurfrules             # Auto-loaded rules for Windsurf (Cascade)
+├── AGENTS.md                  # Multi-agent roster and trigger matrix
+├── CLAUDE.md                  # Auto-loaded instructions for Claude Code
+├── GEMINI.md                  # Auto-loaded rules for Google Antigravity & Gemini CLI
+├── GROK.md                    # Auto-loaded rules for xAI Grok / Grok Build
+├── LICENSE                    # MIT License
+├── README.md                  # Project documentation & lab guide
+├── config/
+│   └── mcp_config.json        # Unified configuration for all 5 MCP servers
+├── docs/                      # Architectural and conceptual deep dives
+│   ├── WHAT_IS_MCP.md         # The MCP protocol, transport, and agent mechanics
+│   ├── WHAT_IS_MCP_VS_API.md  # Detailed comparison: MCP vs. REST / GraphQL / gRPC
+│   └── WHY_MCP_OVER_SCRAPING.md # Why MCP beats web scraping & manual search
+└── scripts/
+    ├── sap_help_mcp_server.py # Pure Python stdio MCP: APIM XML policies & Help search
+    ├── sap_api_hub_mcp_server.py # Pure Python stdio MCP: OData models & CloudEvents
+    └── test_mcp_servers.py    # Automated test harness for student verification
+```
+
+---
+
+## 4. The 5 Pre-Configured MCP Data Sources
+
+All agents and system rules in this repository are grounded against five authoritative data sources configured in `config/mcp_config.json`:
+
+| Server Name | Transport | Responsibility & Toolsets |
+| :--- | :--- | :--- |
+| **`sap-help-portal-local`** | Local stdio (Python) | Authoritative APIM XML policies (`SpikeArrest`, `Quota`, `VerifyAPIKey`, `RaiseFault`) via `sap_help_get_policy` and live documentation search via `sap_help_search`. |
+| **`sap-api-hub-local`** | Local stdio (Python) | S/4HANA OData v2/v4 models, authentication methods, Clean Core ratings via `sap_api_hub_get_api`, and CloudEvents via `sap_api_hub_list_events`. |
+| **`sap-notes`** | Hosted stdio (npx) | Official SAP Support Notes, KBAs, and release notes on `me.sap.com`. |
+| **`sap-docs-community`** | Remote HTTP / SSE | Semantic vector search across SAP Community blogs, ABAP Cloud Feature Matrix, and Discovery Center. |
+| **`sap-developers-search`** | Remote HTTP / SSE | Official tutorials, hands-on missions, and code samples on `developers.sap.com`. |
+
+---
+
+## 5. Architectural Deep Dives (Documentation)
+
+For in-depth conceptual and architectural foundations, explore the guides in `docs/`:
+
+* 📖 **[What is the Model Context Protocol (MCP)?](docs/WHAT_IS_MCP.md)**  
+  Architectural overview, stdio vs. SSE transports, building zero-dependency Python MCP servers, the JSON-RPC 2.0 lifecycle, and the four layers of autonomous agents.
+* 🔌 **[What is an MCP Server vs. a Traditional API?](docs/WHAT_IS_MCP_VS_API.md)**  
+  Detailed comparison of deterministic compile-time APIs (REST, GraphQL, gRPC) versus probabilistic runtime tool execution by LLMs.
+* 🛡️ **[Why Use MCP Over Web Scraping & Manual Search?](docs/WHY_MCP_OVER_SCRAPING.md)**  
+  Technical analysis of SPA hydration traps, WAF/Akamai bot blocking, token pruning economics, and legal Terms of Service compliance.
+
+---
+
+## 6. Automated Verification
+
+Students can verify their environment anytime:
 
 ```bash
 $ python3 scripts/test_mcp_servers.py
@@ -278,12 +138,12 @@ $ python3 scripts/test_mcp_servers.py
 👉 Testing: sap_help_mcp_server.py
    ✅ [initialize] Connected to 'student-sap-help-portal' (v1.0.0)
    ✅ [tools/list] Registered tools: ['sap_help_search', 'sap_help_get_policy', 'sap_help_list_policies']
-   ✅ [tools/call] Invoked 'sap_help_get_policy': ## 🛡️ SAP APIM Policy: SpikeArrest...
+   ✅ [tools/call] Invoked 'sap_help_get_policy': ## SAP APIM Policy: SpikeArrest...
 
 👉 Testing: sap_api_hub_mcp_server.py
    ✅ [initialize] Connected to 'student-sap-api-hub' (v1.0.0)
    ✅ [tools/list] Registered tools: ['sap_api_hub_search', 'sap_api_hub_get_api', 'sap_api_hub_list_events']
-   ✅ [tools/call] Invoked 'sap_api_hub_get_api': ## 📦 SAP API Specification: Business Partner (A2X) - OData v...
+   ✅ [tools/call] Invoked 'sap_api_hub_get_api': ## SAP API Specification: Business Partner (A2X)...
 
 🎉 ALL TESTS PASSED! Your MCP servers are ready for AI Agents.
 ======================================================================
@@ -291,6 +151,6 @@ $ python3 scripts/test_mcp_servers.py
 
 ---
 
-## 📜 License
+## 7. License
 
 This project is licensed under the [MIT License](LICENSE).

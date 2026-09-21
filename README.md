@@ -11,6 +11,8 @@
 ## 🧭 Table of Contents
 
 1. [Architectural Overview: What is MCP?](#1-architectural-overview-what-is-mcp)
+   - 📖 **Deep Dive:** [What is an MCP Server vs. a Traditional API?](docs/WHAT_IS_MCP_VS_API.md)
+   - 🛡️ **Architecture & Legal:** [Why Use MCP Over Web Scraping & Manual Search?](docs/WHY_MCP_OVER_SCRAPING.md)
 2. [The Two Flavors of MCP: Remote URL vs. Local stdio](#2-the-two-flavors-of-mcp-remote-url-vs-local-stdio)
 3. [Deep Dive: Building Zero-Dependency Python MCP Servers](#3-deep-dive-building-zero-dependency-python-mcp-servers)
 4. [Defining Autonomous Agents & Skills](#4-defining-autonomous-agents--skills)

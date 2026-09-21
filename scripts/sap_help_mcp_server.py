@@ -181,7 +181,7 @@ def tool_search(query: str, limit: int = 5) -> str:
             if not results:
                 return f"No online results found on SAP Help Portal for '{query}'."
 
-            lines = [f"### 📖 SAP Help Portal Live Results for '{query}':\n"]
+            lines = [f"### SAP Help Portal Live Results for '{query}':\n"]
             for r in results[:limit]:
                 title = r.get("title", "Untitled")
                 link = "https://help.sap.com" + r.get("url", "")
@@ -207,29 +207,29 @@ def tool_get_policy(policy_name: str) -> str:
         return f"Policy '{policy_name}' not found. Available policies: {list(POLICY_KNOWLEDGE_BASE.keys())}"
 
     out = [
-        f"## 🛡️ SAP APIM Policy: {policy['name']}",
+        f"## SAP APIM Policy: {policy['name']}",
         f"**Category:** {policy['category']}",
         f"**Purpose:** {policy['purpose']}",
         f"**Recommended Placement:** `{policy['placement']}`\n",
-        "### 📄 XML Configuration Template:",
+        "### XML Configuration Template:",
         f"```xml\n{policy['xml_template']}\n```\n",
-        "### ⚙️ Parameters:"
+        "### Parameters:"
     ]
     for p in policy["parameters"]:
         out.append(f"- `{p['param']}` ({p.get('type', 'string')}): {p['description']}")
 
     fr = policy.get("fault_rules", {})
     if fr:
-        out.append("\n### 🚨 Fault Handling & Status Codes:")
+        out.append("\n### Fault Handling & Status Codes:")
         out.append(f"- **Error Code:** `{fr.get('error_code')}`")
         out.append(f"- **HTTP Status:** `{fr.get('http_status')}`")
 
-    out.append(f"\n🔗 **Official Documentation:** {policy['official_doc']}")
+    out.append(f"\n**Official Documentation:** {policy['official_doc']}")
     return "\n".join(out)
 
 def tool_list_policies() -> str:
     """Lists all cataloged policies."""
-    lines = ["## 📋 Available SAP APIM Policies in MCP Server:\n"]
+    lines = ["## Available SAP APIM Policies in MCP Server:\n"]
     for k, v in POLICY_KNOWLEDGE_BASE.items():
         lines.append(f"- **{k}** ({v['category']}): {v['purpose']}")
     return "\n".join(lines)

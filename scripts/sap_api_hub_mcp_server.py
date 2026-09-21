@@ -154,7 +154,7 @@ def tool_search(query: str) -> str:
     if not matches:
         return f"No APIs found in local catalog for '{query}'. Try searching for 'Business Partner', 'Meter Reading', or 'Destination'."
 
-    out = [f"### 🔌 Found SAP APIs for '{query}':\n"]
+    out = [f"### Found SAP APIs for '{query}':\n"]
     for key, item in matches:
         out.append(f"- **{key}**: {item['title']}")
         out.append(f"  * Package: `{item['package']}` | Protocol: `{item['protocol']}`")
@@ -177,23 +177,23 @@ def tool_get_api(api_name: str) -> str:
         return f"API '{api_name}' not found. Available keys: {list(API_CATALOG.keys())}"
 
     out = [
-        f"## 📦 SAP API Specification: {item['title']}",
+        f"## SAP API Specification: {item['title']}",
         f"**Technical Key:** `{key}`",
         f"**Package:** {item['package']}",
         f"**Protocol:** {item['protocol']}",
         f"**Direction:** {item['type']}",
         f"**Clean Core Rating:** {item['clean_core_status']}\n",
-        f"### 📝 Overview:\n{item['description']}\n",
-        "### 🔐 Supported Authentication Schemes:"
+        f"### Overview:\n{item['description']}\n",
+        "### Supported Authentication Schemes:"
     ]
     for a in item["auth"]:
         out.append(f"- {a}")
 
-    out.append("\n### 🧩 Core Entities / Endpoints:")
+    out.append("\n### Core Entities / Endpoints:")
     for e in item["entities"]:
         out.append(f"- `{e}`")
 
-    out.append(f"\n🔗 **Direct Link:** {item['url']}")
+    out.append(f"\n**Direct Link:** {item['url']}")
     return "\n".join(out)
 
 def tool_list_events(filter_topic: Optional[str] = None) -> str:
@@ -206,9 +206,9 @@ def tool_list_events(filter_topic: Optional[str] = None) -> str:
     if not events:
         return f"No events found matching '{filter_topic}'."
 
-    out = ["## ⚡ Available SAP CloudEvents (Event-Driven Architecture):\n"]
+    out = ["## Available SAP CloudEvents (Event-Driven Architecture):\n"]
     for ev in events:
-        out.append(f"### 📡 {ev['name']}")
+        out.append(f"### Event: {ev['name']}")
         out.append(f"- **Topic:** `{ev['topic']}`")
         out.append(f"- **Format:** {ev['format']}")
         out.append(f"- **Pattern:** {ev['description']}\n")
